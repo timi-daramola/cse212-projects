@@ -6,15 +6,23 @@ public static class Arrays
     /// integer greater than 0.
     /// </summary>
     /// <returns>array of doubles that are the multiples of the supplied number</returns>
-    public static double[] MultiplesOf(double number, int length)
-    {
-        // TODO Problem 1 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
 
-        return []; // replace this return statement with your own
+    // Part 1: Arrays
+    public static double[] MultiplesOf(double start, int count)
+    {
+        // Step 1: Create an array to hold the multiples
+        double[] multiples = new double[count];
+
+        // Step 2: Loop through and populate the array with multiples of 'start'
+        for (int i = 0; i < count; i++)
+        {
+            multiples[i] = start * (i + 1);  // The (i+1)th multiple of 'start'
+        }
+
+        // Step 3: Return the populated array
+        return multiples;
     }
+
 
     /// <summary>
     /// Rotate the 'data' to the right by the 'amount'.  For example, if the data is 
@@ -23,11 +31,54 @@ public static class Arrays
     ///
     /// Because a list is dynamic, this function will modify the existing data list rather than returning a new list.
     /// </summary>
+    
     public static void RotateListRight(List<int> data, int amount)
     {
-        // TODO Problem 2 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
+        // Ensure 'amount' is within the valid range
+        amount = amount % data.Count; // Handles cases where 'amount' > data.Count
+
+        // Step 1
+        int splitIndex = data.Count - amount;
+
+        // Step 2
+        List<int> part1 = data.GetRange(splitIndex, amount);
+        List<int> part2 = data.GetRange(0, splitIndex);
+
+        // Step 3
+        data.Clear();
+
+        // Step 4: Add the rotated parts back to the list
+        data.AddRange(part1);
+        data.AddRange(part2);
+    } 
+
+
+    public static void PrintMultiples()
+    {
+        double[] result = MultiplesOf(3, 5);
+
+        // Printing the result
+        Console.WriteLine("Multiples of 3 (5 times):");
+        foreach (double multiple in result)
+        {
+            Console.WriteLine(multiple);
+        }
     }
+
+    public static void ListRotation(string[] args)
+    {
+        // Call PrintMultiples
+        PrintMultiples();
+
+        // Call RotateListRight and display results
+        Console.WriteLine("\nRotated List:");
+        List<int> data = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        RotateListRight(data, 3);
+        foreach (var num in data)
+        {
+            Console.WriteLine(num);
+        }
+    }
+
 }
+
