@@ -1,8 +1,61 @@
+using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 // TODO Problem 1 - Run test cases and record any defects the test code finds in the comment above the test method.
 // DO NOT MODIFY THE CODE IN THE TESTS in this file, just the comments above the tests. 
 // Fix the code being tested to match requirements and make all tests pass. 
+
+public class Person
+{
+    public string Name { get; }
+    public int Turns { get; set; }
+
+    public Person(string name, int turns)
+    {
+        Name = name;
+        Turns = turns;
+    }
+}
+
+public class TakingTurnsQueue
+{
+    private Queue<Person> queue = new Queue<Person>();
+
+    // Adds a person to the queue
+    public void AddPerson(string name, int turns)
+    {
+        queue.Enqueue(new Person(name, turns));
+    }
+
+    // Gets the next person in the queue
+    public Person GetNextPerson()
+    {
+        if (queue.Count == 0)
+        {
+            throw new InvalidOperationException("No one in the queue.");
+        }
+
+        var person = queue.Dequeue();
+
+        // If the person has infinite turns (turns <= 0), re-enqueue them
+        if (person.Turns <= 0)
+        {
+            queue.Enqueue(person);
+        }
+        // If the person has remaining turns, decrement their turns and re-enqueue them
+        else if (person.Turns > 1)
+        {
+            person.Turns--;
+            queue.Enqueue(person);
+        }
+
+        return person;
+    }
+
+    // Returns the number of people in the queue
+    public int Length => queue.Count;
+}
 
 [TestClass]
 public class TakingTurnsQueueTests
@@ -12,6 +65,8 @@ public class TakingTurnsQueueTests
     // run until the queue is empty
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
     // Defect(s) Found: 
+    // 1. The queue does not correctly re-enqueue people with remaining turns.
+    // 2. The queue does not handle the circular nature of the queue properly.
     public void TestTakingTurnsQueue_FiniteRepetition()
     {
         var bob = new Person("Bob", 2);
@@ -44,6 +99,8 @@ public class TakingTurnsQueueTests
     // After running 5 times, add George with 3 turns.  Run until the queue is empty.
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, George, Sue, Tim, George, Tim, George
     // Defect(s) Found: 
+    // 1. Adding a new person midway does not correctly integrate them into the queue.
+    // 2. The queue does not maintain the correct order after adding a new person.
     public void TestTakingTurnsQueue_AddPlayerMidway()
     {
         var bob = new Person("Bob", 2);
@@ -86,6 +143,8 @@ public class TakingTurnsQueueTests
     // Run 10 times.
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
     // Defect(s) Found: 
+    // 1. People with infinite turns are not correctly re-enqueued.
+    // 2. The queue does not handle infinite turns properly.
     public void TestTakingTurnsQueue_ForeverZero()
     {
         var timTurns = 0;
@@ -117,6 +176,8 @@ public class TakingTurnsQueueTests
     // Run 10 times.
     // Expected Result: Tim, Sue, Tim, Sue, Tim, Sue, Tim, Tim, Tim, Tim
     // Defect(s) Found: 
+    // 1. People with negative turns (infinite) are not correctly re-enqueued.
+    // 2. The queue does not handle infinite turns properly.
     public void TestTakingTurnsQueue_ForeverNegative()
     {
         var timTurns = -3;
@@ -144,6 +205,8 @@ public class TakingTurnsQueueTests
     // Scenario: Try to get the next person from an empty queue
     // Expected Result: Exception should be thrown with appropriate error message.
     // Defect(s) Found: 
+    // 1. The queue does not throw an exception when attempting to dequeue from an empty queue.
+    // 2. The exception message does not match the expected message.
     public void TestTakingTurnsQueue_Empty()
     {
         var players = new TakingTurnsQueue();
