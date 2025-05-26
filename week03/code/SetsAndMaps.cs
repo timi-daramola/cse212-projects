@@ -21,8 +21,29 @@ public static class SetsAndMaps
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
     public static string[] FindPairs(string[] words)
     {
-        // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        var result = new List<string>();
+        var seen = new HashSet<string>();
+
+        foreach (var word in words)
+        {
+            // Skip words with identical characters (e.g., "aa")
+            if (word[0] == word[1])
+                continue;
+
+            var reversed = new string(new[] { word[1], word[0] });
+
+            if (seen.Contains(reversed))
+            {
+                result.Add($"{word} & {reversed}");
+                seen.Remove(reversed); // Avoid duplicates
+            }
+            else
+            {
+                seen.Add(word);
+            }
+        }
+
+        return result.ToArray();
     }
 
     /// <summary>
@@ -39,10 +60,22 @@ public static class SetsAndMaps
     public static Dictionary<string, int> SummarizeDegrees(string filename)
     {
         var degrees = new Dictionary<string, int>();
+
         foreach (var line in File.ReadLines(filename))
         {
             var fields = line.Split(",");
-            // TODO Problem 2 - ADD YOUR CODE HERE
+            if (fields.Length < 4) continue; // Skip lines with insufficient columns
+
+            var degree = fields[3].Trim(); // Extract and trim the degree (4th column)
+
+            if (degrees.ContainsKey(degree))
+            {
+                degrees[degree]++;
+            }
+            else
+            {
+                degrees[degree] = 1;
+            }
         }
 
         return degrees;
@@ -66,8 +99,36 @@ public static class SetsAndMaps
     /// </summary>
     public static bool IsAnagram(string word1, string word2)
     {
-        // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        // Normalize the words: remove spaces and convert to lowercase
+        word1 = word1.Replace(" ", "").ToLower();
+        word2 = word2.Replace(" ", "").ToLower();
+
+        // If the lengths are different, they cannot be anagrams
+        if (word1.Length != word2.Length)
+            return false;
+
+        // Create a dictionary to count character frequencies in word1
+        var charCount = new Dictionary<char, int>();
+
+        foreach (var c in word1)
+        {
+            if (charCount.ContainsKey(c))
+                charCount[c]++;
+            else
+                charCount[c] = 1;
+        }
+
+        // Check if word2 matches the character frequencies in the dictionary
+        foreach (var c in word2)
+        {
+            if (!charCount.ContainsKey(c) || charCount[c] == 0)
+                return false;
+
+            charCount[c]--;
+        }
+
+        // If all counts are zero, the words are anagrams
+        return true;
     }
 
     /// <summary>
@@ -94,13 +155,21 @@ public static class SetsAndMaps
         var json = reader.ReadToEnd();
         var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
+        // Deserialize the JSON into the FeatureCollection class
         var featureCollection = JsonSerializer.Deserialize<FeatureCollection>(json, options);
 
-        // TODO Problem 5:
-        // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
-        // on those classes so that the call to Deserialize above works properly.
-        // 2. Add code below to create a string out each place a earthquake has happened today and its magitude.
-        // 3. Return an array of these string descriptions.
-        return [];
+        // Extract and format the earthquake data
+        var result = new List<string>();
+        foreach (var feature in featureCollection.Features)
+        {
+            // Ensure place and magnitude are handled properly
+            var place = feature.Properties?.Place ?? "Unknown location";
+            var magnitude = feature.Properties?.Mag.HasValue == true ? feature.Properties.Mag.Value.ToString("0.0") : "N/A";
+
+            // Add the formatted string to the result
+            result.Add($"Location: {place}, Magnitude: {magnitude}");
+        }
+
+        return result.ToArray();
     }
 }
