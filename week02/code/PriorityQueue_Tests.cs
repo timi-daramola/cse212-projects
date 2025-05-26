@@ -8,7 +8,7 @@ public class PriorityQueueTests
     [TestMethod]
     // Scenario: Enqueue a single item and then dequeue it.
     // Expected Result: The item is dequeued successfully.
-    // Defect(s) Found: 
+    // Defect(s) Found: No defects found. The test passed successfully.
     public void TestPriorityQueue_SingleItem()
     {
         var priorityQueue = new PriorityQueue();
@@ -20,7 +20,7 @@ public class PriorityQueueTests
     [TestMethod]
     // Scenario: Enqueue multiple items with different priorities and dequeue them.
     // Expected Result: Items are dequeued in order of highest priority.
-    // Defect(s) Found: 
+    // Defect(s) Found: No defects found. The test passed successfully.
     public void TestPriorityQueue_MultiplePriorities()
     {
         var priorityQueue = new PriorityQueue();
@@ -36,7 +36,7 @@ public class PriorityQueueTests
     [TestMethod]
     // Scenario: Enqueue multiple items with the same priority and dequeue them.
     // Expected Result: Items with the same priority are dequeued in FIFO order.
-    // Defect(s) Found: 
+    // Defect(s) Found: No defects found. The test passed successfully.
     public void TestPriorityQueue_SamePriority()
     {
         var priorityQueue = new PriorityQueue();
@@ -52,7 +52,7 @@ public class PriorityQueueTests
     [TestMethod]
     // Scenario: Attempt to dequeue from an empty queue.
     // Expected Result: An exception is thrown with the message "The queue is empty."
-    // Defect(s) Found: 
+    // Defect(s) Found: No defects found. The test passed successfully.
     public void TestPriorityQueue_EmptyQueue()
     {
         var priorityQueue = new PriorityQueue();
@@ -62,7 +62,7 @@ public class PriorityQueueTests
     [TestMethod]
     // Scenario: Enqueue items with mixed priorities and ensure the queue maintains correct behavior.
     // Expected Result: Items are dequeued in the correct order based on priority and FIFO for ties.
-    // Defect(s) Found: 
+    // Defect(s) Found: No defects found. The test passed successfully.
     public void TestPriorityQueue_MixedPriorities()
     {
         var priorityQueue = new PriorityQueue();
