@@ -12,4 +12,4 @@ public class Properties
 {
     public string Place { get; set; } // Represents the "place" attribute
     public double? Mag { get; set; }  // Represents the "mag" attribute (nullable in case it's missing)
-}
+} 
